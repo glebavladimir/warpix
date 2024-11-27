@@ -8,8 +8,9 @@ Here’s a README.md file for your project:
 
 ## Requirements
 
-- C++ Compiler (e.g., g++ or clang++)
-- OpenCV Library (4.x or higher)
+- **C++ Compiler** (e.g., g++ or clang++)
+- **OpenCV Library** (4.x or higher)
+- **yaml-cpp Library** (for YAML configuration parsing)
 - macOS, Linux, or Windows with OpenCV installed
 
 ---
@@ -19,16 +20,18 @@ Here’s a README.md file for your project:
 ### Step 1: Install OpenCV
 - On **macOS** (via Homebrew):
 ```bash
-  brew install opencv
+  brew install opencv yaml-cpp
 ```
 
 - On Linux (via APT):
 ```bash
-  sudo apt-get install libopencv-dev
+  sudo apt-get install libopencv-dev libyaml-cpp-dev
 ```
 
 - On Windows:
-Download and install OpenCV from opencv.org.
+  - Download and install OpenCV from opencv.org.
+  - Install the yaml-cpp library manually or through vcpkg.
+
 
 ### Step 2: Clone the Repository
 ```bash
@@ -37,8 +40,16 @@ Download and install OpenCV from opencv.org.
 ```
 
 ### Step 3: Compile the Program
+#### G++
 ```bash
   g++ warpix.cpp -o warpix `pkg-config --cflags --libs opencv4`
+```
+#### CMake
+```bash
+  mkdir build
+  cd build
+  cmake ..
+  make
 ```
 
 ---
@@ -46,38 +57,20 @@ Download and install OpenCV from opencv.org.
 ## Usage
 
 ```yaml
-base_image: base_image.jpg
-target_image: target_image.jpg
-corresponding_points:
-  base_image_points:
-    - [100, 150]
-    - [200, 80]
-    - [250, 300]
-    - [400, 250]
-  target_image_points:
-    - [110, 160]
-    - [210, 90]
-    - [260, 310]
-    - [410, 260]
-output_image: aligned_image.jpg
+base_image_points:
+  - [x, y]
+  - ...
+target_image_points:
+  - [x, y]
+  - ...
 ```
 
-1. Modify path to your images (base_image.jpg and target_image.jpg) in the configuration file.
-2. Modify the corresponding_points to specify at least 4 pairs of coordinates that correspond between the two images.
-3. Save the configuration as configuration.json.
-4. Run the program:
+1. Specify at least 4 pairs of coordinates that correspond between the two images.
+2. Save the points as yaml file.
+3. Run the program:
 ```bash
-  ./warpix configuration.json
+  ./warpix --base path/to/city_old.png --target path/to/city_new.png --output path/to/city_new_aligned.png --points path/to/points.yaml
 ```
-
---- 
-## Example Workflow
-
-- Input images:
-- Original: original.jpg
-- New: new.jpg
-- Define corresponding points and align them using the program.
-- Output: aligned_image.jpg
 
 ---
 
