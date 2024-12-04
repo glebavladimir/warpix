@@ -64,12 +64,14 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y build-essential gcc g++ clang libopencv-dev libyaml-cpp-dev
+        mkdir -p "${{ github.workspace }}/build"
 
     - name: Install Dependencies on macOS
       if: matrix.os == 'macos-latest'
       run: |
         brew update
         brew install opencv yaml-cpp
+        mkdir -p "${{ github.workspace }}/build"
 
     - name: Install Dependencies on Windows
       if: matrix.os == 'windows-latest'
@@ -78,12 +80,7 @@ jobs:
         cd vcpkg
         ./bootstrap-vcpkg.bat
         ./vcpkg install opencv yaml-cpp
-
-    - name: Set Build Directory
-      run: echo "build-output-dir=${{ github.workspace }}/build" >> $GITHUB_ENV
-
-    - name: Create Build Directory
-      run: mkdir -p ${{ env.build-output-dir }}
+        New-Item -Type Directory -Force -Path "${{ github.workspace }}\build"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
